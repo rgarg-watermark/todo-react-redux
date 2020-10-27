@@ -1,4 +1,4 @@
-import { ADD_TODO, TOGGLE_TODO } from "../actions/actionTypes";
+import { ADD_TODO, TOGGLE_TODO, CHANGE_TODO_STATUS } from "../actions/actionTypes";
 
 const initialState = {
   allIds: [],
@@ -8,7 +8,7 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case ADD_TODO: {
-      const { id, content } = action.payload;
+      const { id, content, tags } = action.payload;
       return {
         ...state,
         allIds: [...state.allIds, id],
@@ -16,7 +16,9 @@ export default function(state = initialState, action) {
           ...state.byIds,
           [id]: {
             content,
-            completed: false
+            tags,
+            deleted: false,
+            status: 'not_start'
           }
         }
       };
@@ -29,11 +31,29 @@ export default function(state = initialState, action) {
           ...state.byIds,
           [id]: {
             ...state.byIds[id],
-            completed: !state.byIds[id].completed
+            deleted: !state.byIds[id].deleted
           }
         }
       };
     }
+    case CHANGE_TODO_STATUS: {
+      const { id, status } = action.payload;
+      return {
+        ...state,
+        byIds: {
+          ...state.byIds,
+          [id]: {
+            ...state.byIds[id],
+            status
+          }
+        }
+      };
+    }
+    // case SEARCH_TODO: {
+    //   const { keyword } = action.payload;
+    //   const tags = state.content.filter((val) => val.includes(keyword));
+    //   return {...state, keyword, tags};
+    // }
     default:
       return state;
   }

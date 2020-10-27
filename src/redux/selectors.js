@@ -18,10 +18,10 @@ export const getTodos = store =>
 export const getTodosByVisibilityFilter = (store, visibilityFilter) => {
   const allTodos = getTodos(store);
   switch (visibilityFilter) {
-    case VISIBILITY_FILTERS.COMPLETED:
-      return allTodos.filter(todo => todo.completed);
-    case VISIBILITY_FILTERS.INCOMPLETE:
-      return allTodos.filter(todo => !todo.completed);
+    case VISIBILITY_FILTERS.DELETED:
+      return allTodos.filter(todo => todo.deleted);
+    case VISIBILITY_FILTERS.UNDELETED:
+      return allTodos.filter(todo => !todo.deleted);
     case VISIBILITY_FILTERS.ALL:
     default:
       return allTodos;

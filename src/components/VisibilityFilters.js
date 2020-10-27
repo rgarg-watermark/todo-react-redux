@@ -3,28 +3,52 @@ import cx from "classnames";
 import { connect } from "react-redux";
 import { setFilter } from "../redux/actions/actions";
 import { VISIBILITY_FILTERS } from "../constants";
+import PropTypes from "prop-types";
+import { Tabs, Tab, Paper } from "@material-ui/core";
+import { withStyles } from '@material-ui/core/styles';
 
-const VisibilityFilters = ({ activeFilter, setFilter }) => {
+const useStyles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    margin: theme.spacing(2)
+  },
+});
+
+
+const VisibilityFilters = (props) => {
+  const { classes, activeFilter, setFilter } = props;
   return (
-    <div className="visibility-filters">
+      <Paper className={classes.paper}>
+        <Tabs
+          value={activeFilter}
+          name="mainToggle"
+          indicatorColor="primary"
+          textColor="primary"
+          // onChange={this.handleChange}
+          centered
+        >
       {Object.keys(VISIBILITY_FILTERS).map(filterKey => {
         const currentFilter = VISIBILITY_FILTERS[filterKey];
         return (
-          <span
-            key={`visibility-filter-${currentFilter}`}
+              <Tab label={currentFilter} key={`visibility-filter-${currentFilter}`}
             className={cx(
-              "filter",
+              "add-todo ",
               currentFilter === activeFilter && "filter--active"
             )}
             onClick={() => {
               setFilter(currentFilter);
-            }}
-          >
-            {currentFilter}
-          </span>
+            }} 
+            value={currentFilter} />
         );
-      })}
-    </div>
+      }
+      )}
+            </Tabs>
+          </Paper>
   );
 };
 
@@ -35,4 +59,4 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   { setFilter }
-)(VisibilityFilters);
+)(withStyles(useStyles)(VisibilityFilters));
